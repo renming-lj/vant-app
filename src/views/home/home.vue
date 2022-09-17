@@ -2,7 +2,7 @@
  * @ Author: lijun
  * @ Create Time: 2022-09-17 10:52:58
  * @ Modified by: 
- * @ Modified time: 2022-09-17 14:41:52
+ * @ Modified time: 2022-09-17 15:02:37
  * @ Description: 首页
  -->
 
@@ -36,11 +36,4 @@ const number = ref("");
 const password = ref("");
 </script>
 
-<style lang="less" scoped>
-.my-swipe .van-swipe-item {
-  color: #fff;
-  font-size: 20px;
-  line-height: 150px;
-  text-align: center;
-}
-</style>
+<style lang="less" scoped></style>
