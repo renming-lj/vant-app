@@ -1,2 +1,15 @@
 # vant-app
-vant组件库搭建的app案例
+
+vant 组件库搭建的 app 案例
+
+#### 安装
+
+```
+yarn
+```
+
+#### 运行
+
+```
+yarn dev
+```
