@@ -2,38 +2,74 @@
  * @ Author: lijun
  * @ Create Time: 2022-09-17 10:52:58
  * @ Modified by: 
- * @ Modified time: 2022-09-17 15:02:37
+ * @ Modified time: 2022-09-22 14:45:54
  * @ Description: 首页
  -->
 
 <template>
   <van-nav-bar title="首页" placeholder="true" fixed="true" />
-  <van-cell-group inset>
-    <!-- 输入任意文本 -->
-    <van-field v-model="text" label="文本" placeholder="文本" />
-    <!-- 输入手机号，调起手机号键盘 -->
-    <van-field v-model="tel" type="tel" label="手机号" placeholder="手机号" />
-    <!-- 允许输入正整数，调起纯数字键盘 -->
-    <van-field v-model="digit" type="digit" label="整数" placeholder="整数" />
-    <!-- 允许输入数字，调起带符号的纯数字键盘 -->
-    <van-field v-model="number" type="number" label="数字" placeholder="数字" />
-    <!-- 输入密码 -->
-    <van-field
-      v-model="password"
-      type="password"
-      label="密码"
-      placeholder="密码"
-    />
-  </van-cell-group>
+  <van-count-down
+    class="box-time"
+    ref="countDown"
+    millisecond
+    :time="10000"
+    :auto-start="false"
+    format="ss:SSS"
+    @finish="onFinish"
+  >
+    <template #default="timeData">
+      <span class="block">{{ timeData.hours }}</span>
+      <span class="colon">:</span>
+      <span class="block">{{ timeData.minutes }}</span>
+      <span class="colon">:</span>
+      <span class="block">{{ timeData.seconds }}</span>
+      <span class="colon">:</span>
+      <span class="block">{{ timeData.milliseconds }}</span>
+    </template>
+  </van-count-down>
+  <van-grid clickable>
+    <van-grid-item text="开始" icon="play-circle-o" @click="start" />
+    <van-grid-item text="暂停" icon="pause-circle-o" @click="pause" />
+    <van-grid-item text="重置" icon="replay" @click="reset" />
+  </van-grid>
 </template>
 
 <script setup>
 import { ref } from "vue";
-const tel = ref("");
-const text = ref("");
-const digit = ref("");
-const number = ref("");
-const password = ref("");
+import { Toast } from "vant";
+const countDown = ref(null);
+const start = () => {
+  countDown.value.start();
+};
+const pause = () => {
+  countDown.value.pause();
+};
+const reset = () => {
+  countDown.value.reset();
+};
+const onFinish = () => Toast("倒计时结束");
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.van-grid {
+  justify-content: space-between;
+}
+.colon {
+  display: inline-block;
+  margin: 0 4px;
+  color: #ee0a24;
+}
+.block {
+  display: inline-block;
+  width: 22px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  background-color: #ee0a24;
+}
+.box-time {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+</style>
