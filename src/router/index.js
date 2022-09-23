@@ -2,7 +2,7 @@
  * @ Author: lijun
  * @ Create Time: 2022-09-17 10:38:02
  * @ Modified by: 
- * @ Modified time: 2022-09-22 19:40:06
+ * @ Modified time: 2022-09-23 09:28:36
  * @ Description: 路由
  */
 
@@ -26,6 +26,11 @@ const routes = [{
     name: "add",
     component: () =>
         import ('@/views/home/add.vue')
+}, {
+    path: '/emit',
+    name: "emit",
+    component: () =>
+        import ('@/views/home/emit.vue')
 }]
 
 const router = createRouter({
