@@ -1,39 +1,136 @@
 var express = require('express');
-var app = express();
+let cors = require('cors')
+const server = express();
+const mysql = require('mysql');
 
-// 设置跨域访问
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By", ' 3.2.1');
-    res.header("Content-Type", "application/json;charset=utf-8");
-    next();
+// 连接数据库
+const pool  = mysql.createPool({
+  host : 'localhost',
+  user : 'root',
+  password : 'root',
+  port : 3306,
+  database : 'ceshi'
 });
 
-let result = {
-    data: {
-        pageIndex: 1,
-        pageSize: 10,
-        schoolList: [
-            { schoolName: 'qinghua', palce: 'beijing' },
-            { schoolName: 'zhengzhou', palce: 'zhengzhou' },
-            { schoolName: 'nankai', palce: 'tianjin' }
-        ],
-        code: 200,
-        msg: 'ok'
-    }
+// SQL执行方法
+const query = (sql,params,callback) => {
+    // 获取连接
+    pool.getConnection((err,connected)=>{
+        if(err) {
+            console.log('连接数据库失败');
+            pool.releaseConnection();
+        }
+        connected.query(sql,params,(err,results,fields)=>{
+            if(err){
+                // 释放连接
+                connected.release();
+                console.log('执行sql失败');
+                return;
+            }
+            callback(results,fields)
+            // 释放连接
+            connected.release();
+        })
+    })
 }
 
-// 返回数据data
-app.get('/data', function(req, res) {
-    res.status(200),
-        res.json(result)
+// 配置跨域
+server.use(cors()) 
+
+// 查询数据接口
+server.get('/schoolList',  (request,response,next)=>{
+    let params = [];
+    let sql = "SELECT s_id as id,s_name as name,s_palce as palce FROM school WHERE s_state = 0";
+    query(sql,params,(result)=>{
+        console.log('调用了查询接口');
+        // 返回 json 到前端
+        response.json({
+            code : 200,
+            list : result,
+            total : result.length,
+            msg : '响应成功!'
+        })
+    })
+});
+
+// 添加数据接口
+server.get('/addSchoolList',  (request,response,next)=>{
+    let s_name = request.query.name;
+    let s_palce = request.query.palce;
+    let s_state = request.query.state;
+    let params = [{s_name,s_palce,s_state}];
+    let sql = "INSERT INTO school SET ?;";
+    if(s_name && s_state){
+        query(sql,params,(result)=>{
+            console.log('调用了添加接口');
+            // 返回 json 到前端
+            response.json({
+                code : 200,
+                msg : '响应成功!'
+            })
+        })
+    }else {
+        query(sql,params,(result)=>{
+            response.json({
+                code : 200,
+                msg : '响应失败!'
+            })
+        })
+    }
+});
+
+// 修改数据接口
+server.get('/emitSchoolList',  (request,response,next)=>{
+    let s_id = request.query.id;
+    let s_name = request.query.name;
+    let s_palce = request.query.palce;
+    let params = [{s_name,s_palce},s_id];
+    let sql = "UPDATE school SET ? WHERE s_id = ?";
+    if(s_id && s_name) {
+        query(sql,params,(result)=>{
+            console.log('调用了修改接口');
+            // 返回 json 到前端
+            response.json({
+                code : 200,
+                msg : '响应成功!'
+            })
+        })
+    }else {
+        query(sql,params,(result)=>{
+            response.json({
+                code : 200,
+                msg : '响应失败!'
+            })
+        })
+    }
+});
+
+// 删除数据接口
+server.get('/delSchoolList',  (request,response,next)=>{
+    let s_id = request.query.id;
+    let params = [s_id];
+    let sql = "UPDATE school SET s_state = 1 WHERE s_id = ?";
+    console.log(request.query);
+    if(s_id){
+        query(sql,params,(result)=>{
+            console.log('调用了删除接口');
+            // 返回 json 到前端
+            response.json({
+                code : 200,
+                msg : '响应成功!'
+            })
+        })
+    }else {
+        query(sql,params,(result)=>{
+            response.json({
+                code : 200,
+                msg : '响应失败!'
+            })
+        })
+    }
 });
 
 // 设置接口访问端口为3000
-var server = app.listen(3000, function() {
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('Example app listening at http://127.0.0.1', host, port);
+var servers = server.listen(8888, function() {
+    console.log('Example app listening at http://127.0.0.1:8888');
 })
