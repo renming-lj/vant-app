@@ -2,6 +2,11 @@ var express = require('express');
 let cors = require('cors')
 const server = express();
 const mysql = require('mysql');
+const users = require('./users');
+const bodyParser = require('body-parser');
+// http请求体中间件
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 
 // 连接数据库
 const pool  = mysql.createPool({
@@ -35,7 +40,10 @@ const query = (sql,params,callback) => {
 }
 
 // 配置跨域
-server.use(cors()) 
+server.use(cors());
+
+// 登录注册接口
+server.use('/api/users',users);
 
 // 查询数据接口
 server.get('/schoolList',  (request,response,next)=>{
@@ -130,7 +138,7 @@ server.get('/delSchoolList',  (request,response,next)=>{
     }
 });
 
-// 设置接口访问端口为3000
+// 设置接口访问端口为8888
 var servers = server.listen(8888, function() {
     console.log('Example app listening at http://127.0.0.1:8888');
 })
