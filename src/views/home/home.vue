@@ -30,9 +30,9 @@
     <van-cell v-for="item in list" :key="item.id">
       <template #default>
         <div class="lists">
-          <span>{{ item.text }}</span>
-          <span>{{ item.result }}</span>
-          <van-icon name="edit" @click="emit(item.id)" class="lists-icon" />
+          <span>{{ item.name }}</span>
+          <span>{{ item.palce }}</span>
+          <van-icon name="edit" @click="emit(item)" class="lists-icon" />
         </div>
       </template>
     </van-cell>
@@ -45,42 +45,12 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import backtop from "@/components/backTop/backTop.vue";
+import { reqCategoryList } from '@/api/index.js'
 const router = useRouter();
 const add = () => {
   router.push("add");
 };
-const list = ref([
-  {
-    id: 1,
-    text: "备忘录1",
-    result: "2022/9/23/10/00",
-  },
-  {
-    id: 2,
-    text: "备忘录2",
-    result: "2022/9/23/08/00",
-  },
-  {
-    id: 3,
-    text: "备忘录3",
-    result: "2022/9/23/02/00",
-  },
-  {
-    id: 4,
-    text: "备忘录4",
-    result: "2022/9/23/11/00",
-  },
-  {
-    id: 5,
-    text: "备忘录5",
-    result: "2022/9/23/11/30",
-  },
-  {
-    id: 6,
-    text: "备忘录6",
-    result: "2022/9/23/10/30",
-  },
-]);
+const list = ref([]);
 const loading = ref(false);
 const finished = ref(false);
 
@@ -104,10 +74,18 @@ const onLoad = () => {
 };
 // 点击事件
 const emit = (item) => {
-  console.log("itemitem", item);
-  router.push(`emit`);
-  // :${item}
+  router.push({path:'emit', query:{...item}});
 };
+
+const init = () => {
+  reqCategoryList().then(res=>{
+    console.log(res.data.list,'resres')
+    list.value = res.data.list
+  })
+}
+setTimeout(()=>{
+  init()
+},50)
 </script>
 
 <style lang="less" scoped>
