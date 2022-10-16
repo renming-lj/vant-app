@@ -7,17 +7,17 @@ const requests = axios.create({
     //配置对象
     //基础路径，发请求的时候，路径当中会出现api，不用你手写
     // 线上
-    baseURL:'http://1.116.202.152:8888',
+    // baseURL:'http://1.116.202.152:8888',
     // 本地
-    // baseURL:'http://127.0.0.1:8888',
+    baseURL:'http://127.0.0.1:8888',
     //请求时间超过5秒
     timeout:5000
 });
 //请求拦截器:在发请求之前，请求拦截器可以检测到,可以在请求发出去之前做一些事情
-requests.interceptors.request.use((config)=>{
-    //config是个配置对象，对象里面有一个属性很重要，headers请求头
-    return config;
-});
+// requests.interceptors.request.use((config)=>{
+//     //config是个配置对象，对象里面有一个属性很重要，headers请求头
+//     return config;
+// });
 
 //响应拦截器：包含两个函数（一个是成功返回的函数，一个是失败的返回的函数）
 // requests.intercetors.response.use((res)=>{

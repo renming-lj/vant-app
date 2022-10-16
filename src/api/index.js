@@ -9,5 +9,6 @@ export const reqCategoryList = ()=>{
 // 修改数据
 export const emitCategoryList = (query)=>{
     console.log(query.id,'query')
-    return requests({url:`http://1.116.202.152:8888/emitSchoolList?id=${query.id}&name=${query.name}&palce=${query.palce}`,method:'get'}
+    return requests({url:`/emitSchoolList?id=${query.id}&name=${query.name}&palce=${query.palce}`,method:'get'}
+    // return requests({url:'/emitSchoolList',method:'post',param:{...query}}
 )}

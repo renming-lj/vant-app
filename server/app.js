@@ -6,7 +6,7 @@ const users = require('./users');
 const bodyParser = require('body-parser');
 // http请求体中间件
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(express.urlencoded({ extended: true }));
 
 // 连接数据库
 const pool  = mysql.createPool({
@@ -137,6 +137,33 @@ server.get('/delSchoolList',  (request,response,next)=>{
         })
     }
 });
+
+// 测试post修改数据接口
+server.post('/emitSchoolList',(request,response)=>{
+    console.log(request.body)
+    let s_id = request.body.id;
+    let s_name = request.body.name;
+    let s_palce = request.body.palce;
+    let params = [{s_name,s_palce},s_id];
+    let sql = "UPDATE school SET ? WHERE s_id = ?";
+    if(s_id && s_name) {
+        query(sql,params,(result)=>{
+            console.log('调用了修改接口');
+            // 返回 json 到前端
+            response.json({
+                code : 200,
+                msg : '响应成功!'
+            })
+        })
+    }else {
+        query(sql,params,(result)=>{
+            response.json({
+                code : 200,
+                msg : '响应失败!'
+            })
+        })
+    }
+})
 
 // 设置接口访问端口为8888
 var servers = server.listen(8888, function() {
