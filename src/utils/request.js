@@ -7,9 +7,9 @@ const requests = axios.create({
     //配置对象
     //基础路径，发请求的时候，路径当中会出现api，不用你手写
     // 线上
-    // baseURL:'http://1.116.202.152:8888',
+    baseURL:'http://1.116.202.152:8888',
     // 本地
-    baseURL:'http://127.0.0.1:8888',
+    // baseURL:'http://127.0.0.1:8888',
     //请求时间超过5秒
     timeout:5000
 });
