@@ -2,6 +2,10 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
     transpileDependencies: true,
     lintOnSave: false,
+    // app打包路径更改
+    publicPath: process.env.NODE_ENV === 'production'
+        ? './'
+        : '/'
     //代理跨域
     // devServer:{
     //     proxy: {
