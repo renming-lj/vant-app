@@ -14,6 +14,7 @@
     fixed="true"
   >
     <van-tabbar-item icon="home-o">首页</van-tabbar-item>
+    <van-tabbar-item icon="search">ICP备案查询</van-tabbar-item>
     <van-tabbar-item icon="contact">我的</van-tabbar-item>
   </van-tabbar>
 </template>
@@ -29,6 +30,8 @@ const onChange = () => {
   if (active.value === 0) {
     router.push("home");
   } else if (active.value === 1) {
+    router.push("record");
+  } else if (active.value === 2) {
     router.push("about");
   }
 };

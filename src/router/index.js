@@ -22,6 +22,11 @@ const routes = [{
     component: () =>
         import ('@/views/about/about.vue')
 }, {
+    path: '/record',
+    name: "record",
+    component: () =>
+        import ('@/views/record/record.vue')
+}, {
     path: '/add',
     name: "add",
     component: () =>
